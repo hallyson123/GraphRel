@@ -1,0 +1,111 @@
+CREATE GRAPH TYPE TesteGraphType STRICT {
+(MovieType : Movie {
+    OPTIONAL budget INT,
+    movieId STR,
+    tmdbId STR,
+    imdbVotes INT,
+    runtime INT,
+    countries ARRAY str (1, 16),
+    imdbId STR,
+    url STR,
+    plot STR,
+    released STR,
+    languages ARRAY str (1, 19),
+    imdbRating FLOAT,
+    title STR,
+    poster STR,
+    year INT,
+    OPTIONAL revenue INT}),
+
+(GenreType : Genre {
+    name STR}),
+
+(UserType : User {
+    name STR,
+    userId STR}),
+
+(Person & ActorType : Person & Actor {
+    OPTIONAL born DATE,
+    OPTIONAL bornIn STR,
+    tmdbId STR,
+    OPTIONAL died DATE,
+    *name STR,
+    imdbId STR,
+    url STR,
+    OPTIONAL bio STR,
+    OPTIONAL poster STR}),
+
+(Person & Actor & DirectorType : Person & Actor & Director {
+    born DATE,
+    bornIn STR,
+    tmdbId STR,
+    OPTIONAL bio STR,
+    OPTIONAL died DATE,
+    *name STR,
+    OPTIONAL poster STR,
+    imdbId STR,
+    url STR}),
+
+(Person & DirectorType : Person & Director {
+    OPTIONAL born DATE,
+    OPTIONAL bornIn STR,
+    tmdbId STR,
+    OPTIONAL bio STR,
+    OPTIONAL died DATE,
+    *name STR,
+    imdbId STR,
+    url STR,
+    OPTIONAL poster STR}),
+
+(PessoaType : Pessoa {
+    nome ENUM ("art", "halls")}),
+
+(PersonType : Person {
+    *name STR}),
+
+(:Movie)-[IN_GENREType (1:N);(1:N)]->(:GenreType),
+(:User)-[RATEDType {timestamp: int (100004), rating: ENUM (0.5, 1.0, 2.0, 3.0, 2.5, 4.0, 3.5, 5.0, 4.5, 1.5)} (1:N);(1:N)]->(:MovieType),
+(:Person | Actor)-[ACTED_INType {role: str (34440)} (1:N);(1:N)]->(:MovieType),
+(:Person | Actor | Director)-[ACTED_INType {role: str (34440)} (1:N);(1:N)]->(:MovieType),
+(:Person | Actor | Director)-[DIRECTEDType {role: str (1160)} (1:N);(1:N)]->(:MovieType),
+(:Person | Director)-[DIRECTEDType {role: str (1160)} (1:N);(1:N)]->(:MovieType),
+(:Pessoa)-[TESTE_RELType {singleton: str (7)} (1:N);(1:N)]->(:PessoaType),
+
+FOR (x:MovieType) MANDATORY x.movieId,
+FOR (x:MovieType) MANDATORY x.tmdbId,
+FOR (x:MovieType) MANDATORY x.imdbVotes,
+FOR (x:MovieType) MANDATORY x.runtime,
+FOR (x:MovieType) MANDATORY x.countries,
+FOR (x:MovieType) MANDATORY x.imdbId,
+FOR (x:MovieType) MANDATORY x.url,
+FOR (x:MovieType) MANDATORY x.plot,
+FOR (x:MovieType) MANDATORY x.released,
+FOR (x:MovieType) MANDATORY x.languages,
+FOR (x:MovieType) MANDATORY x.imdbRating,
+FOR (x:MovieType) MANDATORY x.title,
+FOR (x:MovieType) MANDATORY x.poster,
+FOR (x:MovieType) MANDATORY x.year,
+FOR (x:GenreType) MANDATORY x.name,
+FOR (x:UserType) MANDATORY x.name,
+FOR (x:UserType) MANDATORY x.userId,
+FOR (x:Person:ActorType) MANDATORY x.tmdbId,
+FOR (x:Person:ActorType) MANDATORY x.name,
+FOR (x:Person:ActorType) MANDATORY x.imdbId,
+FOR (x:Person:ActorType) MANDATORY x.url,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.born,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.bornIn,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.tmdbId,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.name,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.imdbId,
+FOR (x:Person:Actor:DirectorType) MANDATORY x.url,
+FOR (x:Person:DirectorType) MANDATORY x.tmdbId,
+FOR (x:Person:DirectorType) MANDATORY x.name,
+FOR (x:Person:DirectorType) MANDATORY x.imdbId,
+FOR (x:Person:DirectorType) MANDATORY x.url,
+FOR (x:PessoaType) MANDATORY x.nome,
+FOR (x:PersonType) MANDATORY x.name,
+
+FOR (x:MovieType) SINGLETON x.(movieId, tmdbId),
+FOR (x:GenreType) SINGLETON x.name,
+FOR (x:UserType) SINGLETON x.userId
+}

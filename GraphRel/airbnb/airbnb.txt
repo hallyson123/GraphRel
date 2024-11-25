@@ -1,0 +1,55 @@
+CREATE GRAPH TYPE TesteGraphType STRICT {
+(HostType : Host {
+    host_id STR,
+    host_name STR}),
+
+(ReviewType : Review {
+    date STR}),
+
+(ListingType : Listing {
+    minimum_nights INT,
+    OPTIONAL neighbourhood_group STR,
+    availability_365 INT,
+    room_type STR,
+    number_of_reviews_ltm INT,
+    id STR,
+    number_of_reviews INT,
+    OPTIONAL price INT,
+    OPTIONAL last_review STR,
+    OPTIONAL reviews_per_month FLOAT,
+    name STR,
+    longitude FLOAT,
+    latitude FLOAT,
+    calculated_host_listings_count INT,
+    neighbourhood STR,
+    OPTIONAL license STR}),
+
+(NeighbourhoodType : Neighbourhood {
+    OPTIONAL neighbourhood_group ENUM ("Staten Island", "Manhattan", "Queens", "Brooklyn", "Bronx"),
+    neighbourhood STR}),
+
+(:Host)-[HOSTType (1:1);(1:N)]->(:ListingType),
+(:Review)-[REVIEWSType (1:N);(1:N)]->(:ListingType),
+(:Listing)-[IN_NEIGHBOURHOODType (1:N);(1:1)]->(:NeighbourhoodType),
+
+FOR (x:HostType) MANDATORY x.host_id,
+FOR (x:HostType) MANDATORY x.host_name,
+FOR (x:ReviewType) MANDATORY x.date,
+FOR (x:ListingType) MANDATORY x.minimum_nights,
+FOR (x:ListingType) MANDATORY x.availability_365,
+FOR (x:ListingType) MANDATORY x.room_type,
+FOR (x:ListingType) MANDATORY x.number_of_reviews_ltm,
+FOR (x:ListingType) MANDATORY x.id,
+FOR (x:ListingType) MANDATORY x.number_of_reviews,
+FOR (x:ListingType) MANDATORY x.name,
+FOR (x:ListingType) MANDATORY x.longitude,
+FOR (x:ListingType) MANDATORY x.latitude,
+FOR (x:ListingType) MANDATORY x.calculated_host_listings_count,
+FOR (x:ListingType) MANDATORY x.neighbourhood,
+FOR (x:NeighbourhoodType) MANDATORY x.neighbourhood,
+
+FOR (x:HostType) SINGLETON x.host_id,
+FOR (x:ReviewType) SINGLETON x.date,
+FOR (x:ListingType) SINGLETON x.id,
+FOR (x:NeighbourhoodType) SINGLETON x.neighbourhood
+}
