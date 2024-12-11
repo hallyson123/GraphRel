@@ -1,4 +1,4 @@
-# GraphRel: Ferramenta de Conversão de Grafos para Relacional
+## GraphRel: Ferramenta de Conversão de Grafos para Relacional
 
 ## Descrição 
 

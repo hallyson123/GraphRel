@@ -1,7 +1,7 @@
 CREATE DATABASE TesteRel; 
 \c TesteRel
 
-CREATE TYPE USER_RATEDREL_MOVIE_RATING_ENUM AS ENUM({0.5, 1.0, 2.0, 3.0, 2.5, 4.0, 3.5, 5.0, 4.5, 1.5})
+CREATE TYPE USER_TABLE_RATEDREL_MOVIE_RATING_ENUM AS ENUM('0.5', '1.0', '2.0', '3.0', '2.5', '4.0', '3.5', '5.0', '4.5', '1.5');
 
 /*Criando tabelas com atributos, tipos e PK*/
 CREATE TABLE movie (
@@ -19,7 +19,7 @@ CREATE TABLE movie (
   poster VARCHAR(100) NOT NULL,
   year INTEGER NOT NULL,
   revenue INTEGER,
-  CONSTRAINT pk_movie PRIMARY KEY (['movieId', 'tmdbId']), 
+  CONSTRAINT pk_movie PRIMARY KEY (movieId, tmdbId)
 );
 
 CREATE TABLE genre (
@@ -27,7 +27,7 @@ CREATE TABLE genre (
   CONSTRAINT pk_genre PRIMARY KEY (name) 
 );
 
-CREATE TABLE user (
+CREATE TABLE user_table (
   name VARCHAR(100) NOT NULL,
   userId VARCHAR(100) UNIQUE NOT NULL,
   CONSTRAINT pk_user PRIMARY KEY (userId) 
@@ -43,7 +43,7 @@ CREATE TABLE movie_countries_list (
   movie_tmdbId_id VARCHAR(100) NOT NULL,
   countries VARCHAR(100) NOT NULL,
   FOREIGN KEY (movie_movieId_id) REFERENCES movie(movieId),
-  FOREIGN KEY (movie_tmdbId_id) REFERENCES movie(tmdbId),
+  FOREIGN KEY (movie_tmdbId_id) REFERENCES movie(tmdbId)
 );
 
 CREATE TABLE movie_languages_list (
@@ -51,10 +51,10 @@ CREATE TABLE movie_languages_list (
   movie_tmdbId_id VARCHAR(100) NOT NULL,
   languages VARCHAR(100) NOT NULL,
   FOREIGN KEY (movie_movieId_id) REFERENCES movie(movieId),
-  FOREIGN KEY (movie_tmdbId_id) REFERENCES movie(tmdbId),
+  FOREIGN KEY (movie_tmdbId_id) REFERENCES movie(tmdbId)
 );
 
-CREATE TYPE PERSON_ACTOR_TIPO_ENUM AS ENUM('Person', 'Actor')
+CREATE TYPE PERSON_ACTOR_TIPO_ENUM AS ENUM('Person', 'Actor');
 
 CREATE TABLE person_actor (
   id SERIAL PRIMARY KEY,
@@ -70,7 +70,7 @@ CREATE TABLE person_actor (
   poster VARCHAR(100)
 );
 
-CREATE TYPE PERSON_ACTOR_DIRECTOR_TIPO_ENUM AS ENUM('Person', 'Actor', 'Director')
+CREATE TYPE PERSON_ACTOR_DIRECTOR_TIPO_ENUM AS ENUM('Person', 'Actor', 'Director');
 
 CREATE TABLE person_actor_director (
   id SERIAL PRIMARY KEY,
@@ -86,7 +86,7 @@ CREATE TABLE person_actor_director (
   url VARCHAR(100) NOT NULL
 );
 
-CREATE TYPE PERSON_DIRECTOR_TIPO_ENUM AS ENUM('Person', 'Director')
+CREATE TYPE PERSON_DIRECTOR_TIPO_ENUM AS ENUM('Person', 'Director');
 
 CREATE TABLE person_director (
   id SERIAL PRIMARY KEY,
@@ -110,7 +110,6 @@ CREATE TABLE MOVIE_in_genre_GENRE (
   movie_movieId VARCHAR(20),
   movie_tmdbId VARCHAR(20),
   genre_name VARCHAR(20),
-,
   FOREIGN KEY (movie_movieId) REFERENCES movie(movieId),
   FOREIGN KEY (movie_tmdbId) REFERENCES movie(tmdbId),
   FOREIGN KEY (genre_name) REFERENCES genre(name)
@@ -118,13 +117,13 @@ CREATE TABLE MOVIE_in_genre_GENRE (
 /*Criacao de rel (N:N) finalizada*/
 
 /*Criacao de rel (N:N)*/
-CREATE TABLE USER_rated_MOVIE (
-  user_userId VARCHAR(100),
+CREATE TABLE USER_TABLE_rated_MOVIE (
+  user_TABLE_userId VARCHAR(100),
   movie_movieId VARCHAR(100),
   movie_tmdbId VARCHAR(100),
   timestamp INTEGER NOT NULL,
   rating USER_RATEDREL_MOVIE_RATING_ENUM NOT NULL,
-  FOREIGN KEY (user_userId) REFERENCES user(userId),
+  FOREIGN KEY (user_table_userId) REFERENCES user_table(userId),
   FOREIGN KEY (movie_movieId) REFERENCES movie(movieId),
   FOREIGN KEY (movie_tmdbId) REFERENCES movie(tmdbId)
 );
