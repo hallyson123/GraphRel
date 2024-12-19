@@ -104,12 +104,7 @@ CREATE TABLE person_director (
 
 /*Finalizada a criacao de tabelas (e especializacoes)*/
 
-/*
-
-######################################################*/
 /*######################################################*/
-
-
 
 /*Inicio de tratamento de relacionamentos:*/
 /*Criacao de rel (N:N)*/

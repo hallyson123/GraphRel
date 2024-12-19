@@ -5,8 +5,7 @@ PALAVRAS_RESERVADAS = ["user"]
 
 def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
 
-    script_sql += "/*\n\n######################################################*/\n"
-    script_sql += "/*######################################################*/\n\n\n\n"
+    script_sql += "/*######################################################*/\n\n"
 
     script_sql += "/*Inicio de tratamento de relacionamentos:*/\n"
     # Adicionar relacionamentos
@@ -20,7 +19,7 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
         origem_info = pg_schema_dict["nodes"][rel["origin"]]["primary_key_info"]
         destino_info = pg_schema_dict["nodes"][rel["destination"]]["primary_key_info"] #VERIFICAR PQ N APARECE O DESTINO
         # print(origem_info)
-        print(destino_info)
+        # print(destino_info)
 
         # Interpreta a cardinalidade para definir as constraints
         # origem_card, destino_card = rel["cardinality"].split(';')
@@ -96,7 +95,7 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
                 if pk['composta']:
                     for nome in nome_propriedade:
                         tipo = pg_schema_dict["nodes"][rel["destination"]]['properties'][nome]['type']
-                        tipo = f"VARCHAR({prop_data.get('tamStr', 100)})" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
+                        tipo = f"VARCHAR(100)" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
                         script_sql += f"  {pk['nome_chave']}_{nome} {tipo.upper()},\n"
                         foreign_keys += f"  FOREIGN KEY ({pk['nome_chave']}_{nome}) REFERENCES {destino}({nome}),\n"
                 else:
@@ -113,41 +112,36 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
 ###################################
 
             # Gerar os inserts para a tabela de relacionamento
-            origem_nodes = pg_schema_dict["nodes"][rel["origin"]]["properties"]
-            destino_nodes = pg_schema_dict["nodes"][rel["destination"]]["properties"]
+            # for i in range(max_length):
+            #     colunas_insert = []
+            #     valores_insert = []
 
-            max_length = max(len(next(iter(origem_nodes.values()))), len(next(iter(destino_nodes.values()))))
+            #     # Adicionar valores das chaves de origem
+            #     for pk in origem_info:
+            #         nome = pk["nome_propriedade"]
+            #         valores = pk.get("valores_propriedade") or []  # Garantir que valores seja uma lista
+            #         valor = valores[i] if i < len(valores) else None
+            #         colunas_insert.append(f"{origem}_{nome}")
+            #         valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
 
-            # Propriedades do relacionamento
-            for i in range(max_length):
-                colunas_insert = []
-                valores_insert = []
+            #     # Adicionar valores das chaves de destino
+            #     for pk in destino_info:
+            #         nome = pk["nome_propriedade"]
+            #         valores = pk.get("valores_propriedade") or []  # Garantir que valores seja uma lista
+            #         valor = valores[i] if i < len(valores) else None
+            #         colunas_insert.append(f"{destino}_{nome}")
+            #         valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
 
-                # Chaves de origem
-                for pk in origem_info:
-                    nome_propriedade = pk["nome_propriedade"]
-                    colunas_insert.append(f"{origem}_{nome_propriedade}")
-                    valor = origem_nodes.get(nome_propriedade, [None])
-                    valor = valor[i] if isinstance(valor, list) and i < len(valor) else None
-                    valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
+                # # Adicionar valores das propriedades do relacionamento
+                # for prop_data in rel["valores_prop"]:
+                #     prop = prop_data.get("nome")
+                #     valores = prop_data.get("valores_propriedade") or []  # Garantir que valores seja uma lista
+                #     valor = valores[i] if i < len(valores) else None
+                #     colunas_insert.append(prop)
+                #     valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
 
-                # Chaves de destino
-                for pk in destino_info:
-                    nome_propriedade = pk["nome_propriedade"]
-                    colunas_insert.append(f"{destino}_{nome_propriedade}")
-                    valor = destino_nodes.get(nome_propriedade, [None])
-                    valor = valor[i] if isinstance(valor, list) and i < len(valor) else None
-                    valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
-
-                # Propriedades do relacionamento
-                for prop, prop_data in rel["properties"].items():
-                    colunas_insert.append(prop)
-                    valor = prop_data.get("insert_values", [None])
-                    valor = valor[i] if isinstance(valor, list) and i < len(valor) else None
-                    valores_insert.append(f"'NULL'" if valor is None else f"'{valor}'")
-
-                # Criar o comando INSERT
-                insert_sql += f"INSERT INTO {rel_table} ({', '.join(colunas_insert)}) VALUES ({', '.join(valores_insert)});\n"
+                # Criar comando INSERT
+                # insert_sql += f"INSERT INTO {rel_table} ({', '.join(colunas_insert)}) VALUES ({', '.join(valores_insert)});\n"
 
             script_sql += properties_rel.rstrip(",\n")
             # script_sql += ",\n"
@@ -155,8 +149,6 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
             script_sql += "\n);\n"
 
             script_sql += "/*Criacao de rel (N:N) finalizada*/\n\n"
-
-##################################
 
 ####################################################################################################
 
@@ -373,4 +365,100 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
                     script_sql += script_sql_pk
                     script_sql += ");\n\n"
 
-    return script_sql, insert_sql
+##############################################
+
+    # Gerar os inserts dos relacionamentos
+    i = 0
+    insert_sql = []
+
+    # Percorrer todos os relacionamentos
+    for rel_data in pg_schema_dict["relationships"]:
+        rel_name = rel_data["relationship_type"].lower()
+        origem = '_'.join(rel_data["origin"]).lower()
+        destino = '_'.join(rel_data["destination"]).lower()
+
+        if origem in PALAVRAS_RESERVADAS:
+            origem += "_table"
+        if destino in PALAVRAS_RESERVADAS:
+            destino += "_table"
+
+        # rel_table = f"{'_'.join(rel_data['origin']).lower()}_{rel_data['relationship_type'].lower()}_{'_'.join(rel_data['destination']).lower()}"
+        rel_table = f"{origem}_{rel_name}_{destino}"
+
+        origem_info = pg_schema_dict["nodes"][rel_data["origin"]]["primary_key_info"]
+        destino_info = pg_schema_dict["nodes"][rel_data["destination"]]["primary_key_info"]
+
+        valores_inserts = []
+        colunas_insert = []
+
+        # Obter colunas relevantes das tabelas origem, destino e relacionamento
+        for pk in origem_info:
+            if pk["composta"]:
+                name_prop_origem = pk['nome_propriedade'].split(", ")
+                for n in name_prop_origem:
+                    colunas_insert.append(f"{origem}_{n}")
+            else:
+                if pk['nome_propriedade'] != "id":
+                    colunas_insert.append(f"{origem}_{pk['nome_propriedade']}")
+            
+        for pk in destino_info:
+            if pk["composta"]:
+                name_prop_destino = pk['nome_propriedade'].split(", ")
+                # print(pk['nome_propriedade'])
+                for n in name_prop_destino:
+                    # print(n)
+                    colunas_insert.append(f"{destino}_{n}")
+            else:
+                if pk['nome_propriedade'] != "id":
+                    colunas_insert.append(f"{destino}_{pk['nome_propriedade']}")
+
+        for prop in rel_data["properties"]:
+            colunas_insert.append(prop)
+
+        # Processar os valores para cada relacionamento
+        for rel in rel_data["valores_insert"]:
+            valores_insert = []
+
+            # Adicionar valores das chaves e propriedades do nodo origem
+            for pk in origem_info:
+                nome_propriedade = pk["nome_propriedade"]
+
+                if pk["composta"]:
+                    nome_propriedade = nome_propriedade.split(", ")
+                    for n in nome_propriedade:
+                        valor = rel["propriedades_origem"].get(n)
+                        valores_insert.append(f"'{valor}'" if valor is not None else "NULL")
+                else:
+                    if pk['nome_propriedade'] != "id":
+                        valor = rel["propriedades_origem"].get(nome_propriedade)
+                        valores_insert.append(f"'{valor}'" if valor is not None else "NULL")
+
+            # Adicionar valores das chaves e propriedades do nodo destino
+            for pk in destino_info:
+                nome_propriedade = pk["nome_propriedade"]
+
+                if pk["composta"]:
+                    nome_propriedade = nome_propriedade.split(", ")
+                    for n in nome_propriedade:
+                        valor = rel["propriedades_destino"].get(n)
+                        valores_insert.append(f"'{valor}'" if valor is not None else "NULL")
+                else:        
+                    if pk['nome_propriedade'] != "id":
+                        valor = rel["propriedades_destino"].get(nome_propriedade)
+                        valores_insert.append(f"'{valor}'" if valor is not None else "NULL")
+
+            # Adicionar valores das propriedades do relacionamento
+            for prop in rel_data["properties"]:
+                valor = rel["propriedades_relacionamento"].get(prop)
+                valores_insert.append(f"'{valor}'" if valor is not None else "NULL")
+
+            # Combinar os valores em uma única linha de insert
+            valores_inserts.append(f"({', '.join(valores_insert)})\n")
+
+        # Criar comando SQL final para o relacionamento
+        if valores_inserts:
+            insert_sql.append(
+                f"INSERT INTO {rel_table} ({', '.join(colunas_insert)}) VALUES {', '.join(valores_inserts)};\n"
+            )
+
+    return script_sql, "".join(insert_sql)

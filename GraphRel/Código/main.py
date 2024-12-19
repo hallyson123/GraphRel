@@ -1,5 +1,4 @@
 from GraphRel import gerar_script_sql
-from migra import insert_nodes
 import pickle
 
 ARRAY_LIST = True

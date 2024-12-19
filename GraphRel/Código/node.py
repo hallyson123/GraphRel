@@ -23,14 +23,11 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
 
     # Criar tabelas para nodos com **um** rótulo
     for node_name, node_data in nodos_com_um_rotulo:
-        # print(node_name)
         node = ''.join(node_name)
         tabela_nome = node.lower()
-        # print(tabela_nome)
 
         # Verificar se o nome da tabela é uma palavra reservada
         if tabela_nome in PALAVRAS_RESERVADAS:
-            # print("AAAAAAAAAAA")
             tabela_nome += "_table"
 
         script_sql += f"CREATE TABLE {tabela_nome} (\n"
@@ -38,7 +35,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
 
         if not node_data["uniqueProperties"]:
             script_sql += "  id SERIAL PRIMARY KEY,\n"
-            node_data["primary_key_info"] = [{"nome_propriedade": "id", "nome_chave": "id", "tipo_propriedade": "INTEGER", "composta": False}]
+            node_data["primary_key_info"] = [{"nome_propriedade": "id", "nome_chave": "id", "tipo_propriedade": "INTEGER", "composta": False, "valores_propriedade": None}]
             primary_key_set = True
 
         for prop, prop_data in node_data["properties"].items():
@@ -71,21 +68,26 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
         # Definir chave primaria (unica ou composta)
         if node_data["uniqueProperties"] and not primary_key_set:
             node_data["primary_key_info"] = []
+
+            # Chave unica
             if len(node_data["uniqueProperties"]) == 1:
                 prop_primary = node_data["uniqueProperties"][0]
+                valor_propriedade = node_data["properties"][prop_primary]["insert_values"]
+                # print(prop_primary, valor_propriedade)
                 script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({prop_primary}) \n"
-                
-                node_data["primary_key_info"].append({"nome_propriedade": prop_primary, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": False})
-                # print(node_data["primary_key_info"])
+                node_data["primary_key_info"].append({"nome_propriedade": prop_primary, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": False, "valores_propriedade": valor_propriedade})
             
             else:
                 chave_composta = node_data["uniqueProperties"]
-                chave_composta = ", ".join(chave_composta)
-                script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({chave_composta}) \n"
+                chave_composta_str = ", ".join(chave_composta)
+                script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({chave_composta_str}) \n"
+                # print(chave_composta)
 
-                node_data["primary_key_info"].append({"nome_propriedade": chave_composta, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True})
-                # print(node_data["primary_key_info"])
-
+                for prop in chave_composta:
+                    valor_propriedade = node_data["properties"][prop]["insert_values"]
+                    if ({"nome_propriedade": chave_composta_str, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True}) not in node_data["primary_key_info"]:
+                        node_data["primary_key_info"].append({"nome_propriedade": chave_composta_str, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True})
+            
             primary_key_set = True
 
         script_sql = script_sql.rstrip(",\n")
@@ -105,8 +107,8 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
         for prop, prop_data in node_data["properties"].items():
             if LISTA_COMO_TABELA:
                 if prop_data["type"] != "array":
-                    # print(prop, prop_data["type"])
                     valores_por_coluna.append(prop_data["insert_values"])   
+                    # print(valores_por_coluna)
                     max_length = max(max_length, len(prop_data["insert_values"]))
             else:
                 print("TRATAR LIST")
@@ -132,6 +134,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
 
                 if v is None:
                     values_list.append('NULL')
+                    # print(v)
                 elif tipo == "str":
                     values_list.append(f"'{v}'")
                 elif tipo == "int":
@@ -146,7 +149,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             values = ", ".join(values_list)
             insert_sql += f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});\n"
 
-#########################
+# #########################
 
         # Tratar tipo list (criar tabela ou virar array)
         for prop, prop_data in node_data["properties"].items():
@@ -154,15 +157,14 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             origem_info = pg_schema_dict['nodes'][node_name]['primary_key_info']
 
             if (prop_data["type"] == 'array'):
-                # print("SSSSSSSSSSS")
                 tipo_lista = modificar_tipos(tipo, prop_data)
 
                 if LISTA_COMO_TABELA:
                     tipo_lista_nome = f"{tabela_nome}_{prop}_list"
                     aux_sql_list += f"CREATE TABLE {tipo_lista_nome} (\n"
-                    aux_insert_sql = "\nINSERT DOS DADOS DAS TABELAS DE LISTA\n"
 
                     for pk in origem_info:
+                        # print(pk)
                         nome_propriedade = pk['nome_propriedade']
                         nome_propriedade = nome_propriedade.split(", ") # Divide a string em uma lista pra percorrer uma chave por vez
                         
@@ -196,15 +198,6 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
                                 aux_sql_list += f"  {tabela_nome}_{nome_propriedade} ({pk['tipo_propriedade']}),\n"
                                 aux_sql_list += f"  FOREIGN KEY ({tabela_nome}_{nome_propriedade}) REFERENCES {tabela_nome}({nome_propriedade}),\n"
 
-                #(MODIFICAR)
-                # # inserts para as tabelas de listas
-                # for i, valor_lista in enumerate(prop_data["insert_values"]):
-                #     # print(prop_data["insert_values"])
-                #     print(i, valor_lista)
-                #     # for valor in valor_lista:
-                #     #     pk_values = ", ".join([str(pk['value'][i]) for pk in origem_info])
-                #     #     insert_sql += f"INSERT INTO {tipo_lista_nome} ({', '.join([f'{tabela_nome}_{pk['nome_propriedade']}_id' for pk in origem_info])}, {prop}) VALUES ({pk_values}, '{valor}');\n"
-    
     script_sql += aux_sql_list
 
 ##########################################################################
@@ -226,7 +219,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
 
         if not node_data["uniqueProperties"]:
             script_sql += "  id SERIAL PRIMARY KEY,\n"
-            node_data["primary_key_info"] = [{"nome_propriedade": "id", "nome_chave": "id", "tipo_propriedade": "INTEGER", "composta": False}]
+            node_data["primary_key_info"] = [{"nome_propriedade": "id", "nome_chave": "id", "tipo_propriedade": "INTEGER", "composta": False, "valores_propriedade": None}]
             primary_key_set = True
 
         script_sql += f"  tipo {tipo_enum_filhos.upper()},\n"
@@ -261,16 +254,29 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             node_data["primary_key_info"] = []
             if len(node_data["uniqueProperties"]) == 1:
                 prop_primary = node_data["uniqueProperties"][0]
+                valor_propriedade = node_data["properties"][prop_primary]["insert_values"]
                 script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({prop_primary}) \n"
                 
-                node_data["primary_key_info"].append({"nome_propriedade": prop_primary, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": False})
+                node_data["primary_key_info"].append({"nome_propriedade": prop_primary, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": False, "valores_propriedade": valor_propriedade})
             
+            # else:
+            #     chave_composta = node_data["uniqueProperties"]
+            #     script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({chave_composta}), \n"
+
+            #     node_data["primary_key_info"].append({"nome_propriedade": chave_composta, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True})
+
             else:
                 chave_composta = node_data["uniqueProperties"]
-                script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({chave_composta}), \n"
+                chave_composta_str = ", ".join(chave_composta)
+                script_sql += f"  CONSTRAINT pk_{node.lower()} PRIMARY KEY ({chave_composta_str}) \n"
+                # print(chave_composta)
 
-                node_data["primary_key_info"].append({"nome_propriedade": chave_composta, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True})
+                for prop in chave_composta:
+                    valor_propriedade = node_data["properties"][prop]["insert_values"]
 
+                    if ({"nome_propriedade": chave_composta_str, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True}) not in node_data["primary_key_info"]:
+                        node_data["primary_key_info"].append({"nome_propriedade": chave_composta_str, "nome_chave": f"{tabela_nome}", "tipo_propriedade": tipo_fk, "composta": True})
+            
             primary_key_set = True
 
         script_sql = script_sql.rstrip(",\n")
@@ -290,7 +296,6 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
         for prop, prop_data in node_data["properties"].items():
             if LISTA_COMO_TABELA:
                 if prop_data["type"] != "array":
-                    # print(prop, prop_data["type"])
                     valores_por_coluna.append(prop_data["insert_values"])   
                     max_length = max(max_length, len(prop_data["insert_values"]))
             else:
@@ -325,6 +330,8 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
                     values_list.append(f"{v:.2f}")  # Formatar floats com duas casas decimais (se necessário)
                 elif tipo == "bool":
                     values_list.append('TRUE' if v else 'FALSE')
+                elif tipo == "Date":
+                    values_list.append(f"'{v}'")
                 else:
                     values_list.append(f"'{v}'")  # Caso padrão (trata como string)
 
