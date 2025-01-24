@@ -1,0 +1,136 @@
+Erro na linha 16458: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('72781', NULL, 'Comedy')
+
+Erro na linha 16459: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('72781', NULL, 'Documentary')
+
+Erro na linha 16529: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('73759', NULL, 'Action')
+
+Erro na linha 16530: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('73759', NULL, 'Animation')
+
+Erro na linha 16531: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('73759', NULL, 'Horror')
+
+Erro na linha 19031: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('108548', NULL, 'Comedy')
+
+Erro na linha 19033: ERRO:  inserção ou atualização em tabela "movie_in_genre_genre" viola restrição de chave estrangeira "movie_in_genre_genre_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO movie_in_genre_genre (movie_movieId, movie_tmdbId, genre_name) VALUES ('108583', NULL, 'Comedy')
+
+Erro na linha 31880: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('73', '73759', NULL, '1273212258', '4.0')
+
+Erro na linha 32078: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('73', '108583', NULL, '1435472609', '5.0')
+
+Erro na linha 56959: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('262', '108583', NULL, '1433899163', '2.5')
+
+Erro na linha 58010: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('270', '108548', NULL, '1469278482', '3.0')
+
+Erro na linha 78716: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('423', '72781', NULL, '1353701647', '4.5')
+
+Erro na linha 113250: ERRO:  inserção ou atualização em tabela "user_table_rated_movie" viola restrição de chave estrangeira "user_table_rated_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO user_table_rated_movie (user_table_userId, movie_movieId, movie_tmdbId, timestamp, rating) VALUES ('615', '108583', NULL, '1425504620', '5.0')
+
+Erro na linha 124990: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108583', NULL, NULL)
+
+Erro na linha 124991: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108583', NULL, NULL)
+
+Erro na linha 141179: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('73759', NULL, NULL)
+
+Erro na linha 141180: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(73759) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('73759', NULL, NULL)
+
+Erro na linha 141858: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108548', NULL, NULL)
+
+Erro na linha 141859: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108548', NULL, NULL)
+
+Erro na linha 141860: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108548', NULL, NULL)
+
+Erro na linha 142617: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('72781', NULL, NULL)
+
+Erro na linha 142618: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('72781', NULL, NULL)
+
+Erro na linha 142619: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('72781', NULL, NULL)
+
+Erro na linha 142620: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(72781) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('72781', NULL, NULL)
+
+Erro na linha 149777: ERRO:  inserção ou atualização em tabela "person_actor_acted_in_movie" viola restrição de chave estrangeira "person_actor_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108548) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108548', NULL, NULL)
+
+Erro na linha 155310: ERRO:  inserção ou atualização em tabela "person_actor_director_acted_in_movie" viola restrição de chave estrangeira "person_actor_director_acted_in_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_director_acted_in_movie (movie_movieId, movie_tmdbId, role) VALUES ('108583', NULL, NULL)
+
+Erro na linha 159958: ERRO:  inserção ou atualização em tabela "person_actor_director_directed_movie" viola restrição de chave estrangeira "person_actor_director_directed_movie_movie_movieid_fkey"
+DETAIL:  Chave (movie_movieid)=(108583) não está presente na tabela "movie".
+
+Query com erro: INSERT INTO person_actor_director_directed_movie (movie_movieId, movie_tmdbId, role) VALUES ('108583', NULL, NULL)
+
+Quantidade de erros: 27

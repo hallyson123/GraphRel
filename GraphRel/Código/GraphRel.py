@@ -12,8 +12,8 @@ def gerar_script_sql(pg_schema_dict):
 
     aux_sql_list = ""
 
-    script_sql += "CREATE DATABASE TesteRel; \n"
-    script_sql += "\c testerel\n"
+    # script_sql += "CREATE DATABASE testerel; \n"
+    # script_sql += "\c testerel\n"
 
     # Criar tipo ENUM (nodos)
     for node_name, node_data in pg_schema_dict["nodes"].items():
@@ -22,7 +22,7 @@ def gerar_script_sql(pg_schema_dict):
                 node = ''.join(node_name)
                 tipo_enum = f"{node}_{prop}_enum"
                 prop_data["typeEnum"] = tipo_enum
-                script_sql += f"CREATE TYPE {tipo_enum.upper()} AS ENUM({prop_data['values']});\n"
+                # script_sql += f"CREATE TYPE {tipo_enum.upper()} AS ENUM({prop_data['values']});\n"
 
                 # USAR DEPOIS
                 # script_sql += f"CREATE TYPE {tipo_enum_filhos.upper()} AS ENUM({', '.join([f'\'{child_label}\'' for child_label in node_name])});\n\n"
@@ -51,7 +51,7 @@ def gerar_script_sql(pg_schema_dict):
 
                 # print(valores_formatados)
 
-                script_sql += f"CREATE TYPE {tipo_enum.upper()} AS ENUM({valores_formatados});\n"
+                # script_sql += f"CREATE TYPE {tipo_enum.upper()} AS ENUM({valores_formatados});\n"
 
     script_sql += "\n"
 

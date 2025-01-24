@@ -7,7 +7,9 @@ PALAVRAS_RESERVADAS = ["user"]
 def tratamento_node(script_sql, insert_sql, pg_schema_dict):
     # Criar tabelas para os nodos
     script_sql += "/*Criando tabelas com atributos, tipos e PK*/\n"
-    insert_sql += "/*Inserts para popular as tabelas*/\n"
+    # insert_sql += "/*Inserts para popular as tabelas*/\n"
+
+    insert_sql = []
 
     nodos_com_um_rotulo = []
     nodos_com_multiplos_rotulos = []
@@ -51,7 +53,8 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             if LISTA_COMO_TABELA == False:
                 if prop_data['type'] == 'array':
                     tipo = prop_data['typeList']
-                    tipo = f"VARCHAR(100)" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
+                    # tipo = f"VARCHAR(1000)" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
+                    tipo = f"VARCHAR" if tipo == "str" else ("BIGINT" if tipo == "int" else "REAL")
                     tipo += "[]"
                     if prop_data["unique"]:
                         tipo += " UNIQUE"
@@ -132,9 +135,11 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
                 # Tratar o valor com base no tipo esperado
                 tipo = prop_data["type"]
 
+                if v == "deleted":
+                    print(prop_name, v)
+
                 if v is None:
                     values_list.append('NULL')
-                    # print(v)
                 elif tipo == "str":
                     values_list.append(f"'{v}'")
                 elif tipo == "int":
@@ -147,7 +152,10 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
                     values_list.append(f"'{v}'")  # Caso padrão (trata como string)
 
             values = ", ".join(values_list)
-            insert_sql += f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});\n"
+            if values == "'user899621', deleted":
+                print(values)
+            # insert_sql += f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});\n"
+            insert_sql.append(f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});")
 
 # #########################
 
@@ -209,7 +217,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
         tabela_nome = node.lower()
 
         tipo_enum_filhos = f"{tabela_nome}_tipo_enum"
-        script_sql += f"CREATE TYPE {tipo_enum_filhos.upper()} AS ENUM({', '.join([f'\'{child_label}\'' for child_label in node_name])});\n\n"
+        #script_sql += f"CREATE TYPE {tipo_enum_filhos.upper()} AS ENUM({', '.join([f'\'{child_label}\'' for child_label in node_name])});\n\n"
 
         # Flag para especialização
         node_data['is_spec'] = True
@@ -222,7 +230,7 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             node_data["primary_key_info"] = [{"nome_propriedade": "id", "nome_chave": "id", "tipo_propriedade": "INTEGER", "composta": False, "valores_propriedade": None}]
             primary_key_set = True
 
-        script_sql += f"  tipo {tipo_enum_filhos.upper()},\n"
+        # script_sql += f"  tipo {tipo_enum_filhos.upper()},\n"
 
         for prop, prop_data in node_data["properties"].items():
             tipo = prop_data["type"]
@@ -237,7 +245,8 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
             if LISTA_COMO_TABELA == False:
                 if prop_data['type'] == 'array':
                     tipo = prop_data['typeList']
-                    tipo = f"VARCHAR(100)" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
+                    # tipo = f"VARCHAR(1000)" if tipo == "str" else ("INTEGER" if tipo == "int" else "REAL")
+                    tipo = f"VARCHAR" if tipo == "str" else ("BIGINT" if tipo == "int" else "REAL")
                     tipo += "[]"
                     if prop_data["unique"]:
                         tipo += " UNIQUE"
@@ -336,7 +345,8 @@ def tratamento_node(script_sql, insert_sql, pg_schema_dict):
                     values_list.append(f"'{v}'")  # Caso padrão (trata como string)
 
             values = ", ".join(values_list)
-            insert_sql += f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});\n"
+            # insert_sql += f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});\n"
+            insert_sql.append(f"INSERT INTO {tabela_nome} ({columns}) VALUES ({values});")
 
 ###############################
 

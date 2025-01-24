@@ -1,8 +1,9 @@
 def modificar_tipos(tipo, prop_data):
     if tipo == "str":
-        tipo = f"VARCHAR({prop_data['tamStr']})" if prop_data["tamStr"] >= 100 else "VARCHAR(100)"
+        tipo = f"VARCHAR"
     if tipo == "int":
-        tipo = "integer"
+        # tipo = "integer"
+        tipo = "bigint"
     if tipo == "float":
         tipo = "real"
 
@@ -11,7 +12,7 @@ def modificar_tipos(tipo, prop_data):
 
     if prop_data["unique"]:
         tipo += " UNIQUE"
-    if not prop_data["optional"]:
-        tipo += " NOT NULL"
+    # if not prop_data["optional"]:
+    #     tipo += " NOT NULL"
 
     return tipo
