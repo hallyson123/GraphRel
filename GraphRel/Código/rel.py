@@ -397,6 +397,9 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
             for rel in rel_data["valores_insert"]:
                 valores_insert = []
 
+                set_clauses = []
+                where_clauses = []
+
                 # Adicionar valores das chaves e propriedades do nodo origem
                 for pk in origem_info:
                     nome_propriedade = pk["nome_propriedade"]
@@ -482,5 +485,87 @@ def tratamento_rel(script_sql, insert_sql, pg_schema_dict):
                             insert_sql.append(
                                 f"UPDATE {destino} SET {origem}_{nome_propriedade} = '{valor_origem}' WHERE id = '{id_destino}';\n"
                             )
+            
+        # elif cardinality == "N:1":
+        #     target_table = origem
+        #     for pk in origem_info:
+        #         col = pk["nome_propriedade"]
+        #         if pk["composta"]:
+        #             for n in pk["nome_propriedade"].split(", "):
+        #                 val = rel["propriedades_origem"].get(n)
+        #                 set_clauses.append(f"{origem}_{n} = '{val}'" if val is not None else f"{origem}_{n} = NULL")
+        #         else:
+        #             if pk["nome_propriedade"] != "id":
+        #                 val = rel["propriedades_origem"].get(col)
+        #                 set_clauses.append(f"{origem}_{col} = '{val}'" if val is not None else f"{origem}_{col} = NULL")
+        #     for pk in destino_info:
+        #         col = pk["nome_propriedade"]
+        #         if pk["composta"]:
+        #             for n in pk["nome_propriedade"].split(", "):
+        #                 val = rel["propriedades_destino"].get(n)
+        #                 where_clauses.append(f"{n} = '{val}'" if val is not None else f"{n} IS NULL")
+        #         else:
+        #             if pk["nome_propriedade"] != "id":
+        #                 val = rel["propriedades_destino"].get(col)
+        #                 where_clauses.append(f"{col} = '{val}'" if val is not None else f"{col} IS NULL")
+
+        # elif cardinality == "1:1":
+        #     if rel_data.get("more_occurrence") == rel_data["origin"]:
+        #         target_table = destino
+        #         for pk in destino_info:
+        #             col = pk["nome_propriedade"]
+        #             if pk["composta"]:
+        #                 for n in pk["nome_propriedade"].split(", "):
+        #                     val = rel["propriedades_destino"].get(n)
+        #                     where_clauses.append(f"{n} = '{val}'" if val is not None else f"{n} IS NULL")
+        #             else:
+        #                 if pk["nome_propriedade"] != "id":
+        #                     val = rel["propriedades_destino"].get(col)
+        #                     where_clauses.append(f"{col} = '{val}'" if val is not None else f"{col} IS NULL")
+        #         for pk in origem_info:
+        #             col = pk["nome_propriedade"]
+        #             if pk["composta"]:
+        #                 for n in pk["nome_propriedade"].split(", "):
+        #                     val = rel["propriedades_origem"].get(n)
+        #                     set_clauses.append(f"{origem}_{n} = '{val}'" if val is not None else f"{origem}_{n} = NULL")
+        #             else:
+        #                 if pk["nome_propriedade"] != "id":
+        #                     val = rel["propriedades_origem"].get(col)
+        #                     set_clauses.append(f"{origem}_{col} = '{val}'" if val is not None else f"{origem}_{col} = NULL")
+        #     else:
+        #         target_table = origem
+        #         for pk in origem_info:
+        #             col = pk["nome_propriedade"]
+        #             if pk["composta"]:
+        #                 for n in pk["nome_propriedade"].split(", "):
+        #                     val = rel["propriedades_origem"].get(n)
+        #                     where_clauses.append(f"{n} = '{val}'" if val is not None else f"{n} IS NULL")
+        #             else:
+        #                 if pk["nome_propriedade"] != "id":
+        #                     val = rel["propriedades_origem"].get(col)
+        #                     where_clauses.append(f"{col} = '{val}'" if val is not None else f"{col} IS NULL")
+        #         for pk in destino_info:
+        #             col = pk["nome_propriedade"]
+        #             if pk["composta"]:
+        #                 for n in pk["nome_propriedade"].split(", "):
+        #                     val = rel["propriedades_destino"].get(n)
+        #                     set_clauses.append(f"{destino}_{n} = '{val}'" if val is not None else f"{destino}_{n} = NULL")
+        #             else:
+        #                 if pk["nome_propriedade"] != "id":
+        #                     val = rel["propriedades_destino"].get(col)
+        #                     set_clauses.append(f"{destino}_{col} = '{val}'" if val is not None else f"{destino}_{col} = NULL")
+
+        # else:
+        #     # autorelacionamento
+        #     target_table = origem
+        #     for key, val in rel["propriedades_origem"].items():
+        #         set_clauses.append(f"{key} = '{val}'" if val is not None else f"{key} = NULL")
+        #     for key, val in rel["propriedades_destino"].items():
+        #         where_clauses.append(f"{key} = '{val}'" if val is not None else f"{key} IS NULL")
+        
+        # update_query = f"UPDATE {target_table} SET {', '.join(set_clauses)} WHERE {' AND '.join(where_clauses)};"
+        # insert_sql.append(update_query)
+        # i += 1
+        # print(f"Processado relacionamento {i}")
 
     return script_sql, "".join(insert_sql)

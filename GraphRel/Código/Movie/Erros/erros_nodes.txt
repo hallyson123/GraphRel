@@ -1,0 +1,56 @@
+--------------------------------------------
+Linha 7409. ERRO:  o valor nulo na coluna "tmdbid" da relação "movie" viola a restrição de não-nulo
+DETAIL:  Registro que falhou contém (null, 72781, null, 274, 59, 1104746, null, A Danish-Korean theater group, Simon Jul Jørgensen and Jacob No..., 2006-12-01, 7.7, Red Chapel (Røde kapel), null, null, null).
+Chave primaria removida: ALTER TABLE movie DROP CONSTRAINT pk_movie
+Colunas com NOT NULL em movie: ['movieid', 'tmdbid']
+Comando executado: ALTER TABLE movie ALTER COLUMN movieid DROP NOT NULL;
+Comando executado: ALTER TABLE movie ALTER COLUMN tmdbid DROP NOT NULL;
+Query reexecutada com sucesso na linha 7409.
+Remover resgistro com valor NULL: DELETE FROM movie WHERE movieid IS NULL;
+Remover resgistro com valor NULL: DELETE FROM movie WHERE tmdbid IS NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN movieid SET NOT NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN tmdbid SET NOT NULL;
+Chave primária restaurada: ALTER TABLE movie ADD CONSTRAINT pk_movie PRIMARY KEY (movieid, tmdbid);
+--------------------------------------------
+Linha 7439. ERRO:  o valor nulo na coluna "tmdbid" da relação "movie" viola a restrição de não-nulo
+DETAIL:  Registro que falhou contém (null, 73759, null, 10550, 50, 0495212, null, The vampire Alucard and his newly sired ward Seras tries to prot..., 2006-12-05, 8.5, Hellsing Ultimate OVA Series, null, null, null).
+Chave primaria removida: ALTER TABLE movie DROP CONSTRAINT pk_movie
+Colunas com NOT NULL em movie: ['movieid', 'tmdbid']
+Comando executado: ALTER TABLE movie ALTER COLUMN movieid DROP NOT NULL;
+Comando executado: ALTER TABLE movie ALTER COLUMN tmdbid DROP NOT NULL;
+Query reexecutada com sucesso na linha 7439.
+Remover resgistro com valor NULL: DELETE FROM movie WHERE movieid IS NULL;
+Remover resgistro com valor NULL: DELETE FROM movie WHERE tmdbid IS NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN movieid SET NOT NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN tmdbid SET NOT NULL;
+Chave primária restaurada: ALTER TABLE movie ADD CONSTRAINT pk_movie PRIMARY KEY (movieid, tmdbid);
+--------------------------------------------
+Linha 8506. ERRO:  o valor nulo na coluna "tmdbid" da relação "movie" viola a restrição de não-nulo
+DETAIL:  Registro que falhou contém (null, 108548, null, 510214, 22, 0898266, null, A woman who moves into an apartment across the hall from two bri..., 2007-09-24, 8.4, Big Bang Theory, The (, null, null, null).
+Chave primaria removida: ALTER TABLE movie DROP CONSTRAINT pk_movie
+Colunas com NOT NULL em movie: ['movieid', 'tmdbid']
+Comando executado: ALTER TABLE movie ALTER COLUMN movieid DROP NOT NULL;
+Comando executado: ALTER TABLE movie ALTER COLUMN tmdbid DROP NOT NULL;
+Query reexecutada com sucesso na linha 8506.
+Remover resgistro com valor NULL: DELETE FROM movie WHERE movieid IS NULL;
+Remover resgistro com valor NULL: DELETE FROM movie WHERE tmdbid IS NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN movieid SET NOT NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN tmdbid SET NOT NULL;
+Chave primária restaurada: ALTER TABLE movie ADD CONSTRAINT pk_movie PRIMARY KEY (movieid, tmdbid);
+--------------------------------------------
+Linha 8508. ERRO:  o valor nulo na coluna "tmdbid" da relação "movie" viola a restrição de não-nulo
+DETAIL:  Registro que falhou contém (null, 108583, null, 55189, 30, 0072500, null, Hotel owner Basil Fawlty s incompetence, short fuse, and arrogan..., 1975-09-19, 8.8, Fawlty Towers (1975, null, null, null).
+Chave primaria removida: ALTER TABLE movie DROP CONSTRAINT pk_movie
+Colunas com NOT NULL em movie: ['movieid', 'tmdbid']
+Comando executado: ALTER TABLE movie ALTER COLUMN movieid DROP NOT NULL;
+Comando executado: ALTER TABLE movie ALTER COLUMN tmdbid DROP NOT NULL;
+Query reexecutada com sucesso na linha 8508.
+Remover resgistro com valor NULL: DELETE FROM movie WHERE movieid IS NULL;
+Remover resgistro com valor NULL: DELETE FROM movie WHERE tmdbid IS NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN movieid SET NOT NULL;
+Restrição NOT NULL restaurada: ALTER TABLE movie ALTER COLUMN tmdbid SET NOT NULL;
+Chave primária restaurada: ALTER TABLE movie ADD CONSTRAINT pk_movie PRIMARY KEY (movieid, tmdbid);
+--------------------------------------------
+
+Quantidade de erros sem solução: 0
+Quantidade de erros solucionados: 4

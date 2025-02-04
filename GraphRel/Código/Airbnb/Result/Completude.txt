@@ -1,0 +1,25 @@
+** Completude **
+
+Neo4j - Nodos:
+  Labels: ('Host',) – Total: 111494
+  Labels: ('Review',) – Total: 5135
+  Labels: ('Listing',) – Total: 173584
+  Labels: ('Neighbourhood',) – Total: 472
+
+Neo4j - Relacionamentos:
+  Tipo: HOST – Total: 173584
+  Tipo: REVIEWS – Total: 3967658
+  Tipo: IN_NEIGHBOURHOOD – Total: 173584
+
+Postgres - Tabelas de nodos:
+  Tabela: host – Total: 111494
+  Tabela: review – Total: 5135
+  Tabela: listing – Total: 173584
+  Tabela: neighbourhood – Total: 472
+  Tabela: host_host_listing – Total: 173584
+  Tabela: listing_in_neighbourhood_neighbourhood – Total: 173584
+  Tabela: review_reviews_listing – Total: 3967658
+
+Resumo:
+Neo4j - Nodos: 290685, Relacionamentos: 4314826
+Postgres - Nodos: 290685, Relacionamentos: 4314826

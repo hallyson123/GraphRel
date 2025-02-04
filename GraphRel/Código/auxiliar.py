@@ -12,7 +12,7 @@ def modificar_tipos(tipo, prop_data):
 
     if prop_data["unique"]:
         tipo += " UNIQUE"
-    # if not prop_data["optional"]:
-    #     tipo += " NOT NULL"
+    if not prop_data["optional"]:
+        tipo += " NOT NULL"
 
     return tipo

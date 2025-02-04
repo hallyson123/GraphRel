@@ -1,0 +1,34 @@
+** Completude **
+
+Neo4j - Nodos:
+  Labels: ('Question',) - Total: 1589
+  Labels: ('User',) - Total: 1365
+  Labels: ('Tag',) - Total: 476
+  Labels: ('Answer') - Total: 1367
+  Labels: ('Comment') - Total: 1396
+
+Neo4j - Relacionamentos:
+  Tipo: ANSWERED - Total: 1367
+  Tipo: ASKED - Total: 1589
+  Tipo: COMMENTED - Total: 1396
+  Tipo: COMMENTED_ON - Total: 1396
+  Tipo: PROVIDED - Total: 1367
+  Tipo: TAGGED - Total: 4425
+
+Postgres - Tabelas de nodos:
+  Tabela: question - Total: 1589 
+  Tabela: user_table - Total: 1365
+  Tabela: tag - Total: 476
+  Tabela: answer - Total: 1367
+  Tabela: comment - Total: 1396
+
+  Tabela: answer_answered_question - Total: 1367
+  Tabela: user_table_asked_question - Total: 1589
+  Tabela: user_table_commented_comment - Total: 1396
+  Tabela: comment_commented_on_question - Total: 1396
+  Tabela: user_table_provided_answer - Total: 1367
+  Tabela: question_tagged_tag - Total: 4425
+
+Resumo:
+Neo4j - Nodos: 6193, Relacionamentos: 11540
+Postgres - Nodos: 6193, Relacionamentos: 11540
