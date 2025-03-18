@@ -491,8 +491,8 @@ if __name__ == "__main__":
     # Carregar o dicionário
     # file_path = "GraphRel/nos_dump.pkl"
     # file_path = "GraphRel/stackoverflow.pkl"
-    # file_path = "GraphRel/movie.pkl"
-    file_path = "GraphRel/airbnb.pkl"
+    file_path = "GraphRel/movie.pkl"
+    # file_path = "GraphRel/airbnb.pkl"
 
     with open(file_path, "rb") as f:
         pg_schema_dict = pickle.load(f)
@@ -545,12 +545,12 @@ if __name__ == "__main__":
     conn_postgres = psycopg2.connect(dbname="testerel", **DATABASE_CONFIG)
     conn_neo4j = GraphDatabase.driver(uri="bolt://localhost:7687", auth=("neo4j", "1F16EBD3"))
 
-    if verificar_completude(conn_postgres, conn_neo4j):
-        print("Completude: Todos os dados foram inseridos corretamente.")
-    else:
-        print("Completude: Discrepâncias encontradas.")
+    # if verificar_completude(conn_postgres, conn_neo4j):
+    #     print("Completude: Todos os dados foram inseridos corretamente.")
+    # else:
+    #     print("Completude: Discrepâncias encontradas.")
 
-    if verificar_corretude(conn_postgres, conn_neo4j):
-        print("Corretude: Os dados foram migrados corretamente.")
-    else:
-        print("Corretude: Diferenças encontradas nos dados.")
+    # if verificar_corretude(conn_postgres, conn_neo4j):
+    #     print("Corretude: Os dados foram migrados corretamente.")
+    # else:
+    #     print("Corretude: Diferenças encontradas nos dados.")
